@@ -35,8 +35,7 @@ jobs:
 
       - name: Builda sta roba!!
         run: |
-          gcc -Wall -Wextra -std=c11 -c stream_client1.c -o stream_client1.o
-          gcc stream_client1.o -o stream_client1
+          gcc -std=gnu89 -w stream_client1.c -o stream_client1
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
