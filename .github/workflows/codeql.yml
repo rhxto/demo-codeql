@@ -39,8 +39,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
-          # build-mode manual per controllare il processo di build
-          build-mode: manual
+          build-mode: none
           queries: security-and-quality
 
       - name: Build / run tests (so the CodeQL tracer can observe runtime build steps)
