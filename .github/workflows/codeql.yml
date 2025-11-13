@@ -33,8 +33,9 @@ jobs:
           languages: ${{ matrix.language }}
           queries: security-and-quality
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+      - name: Builda sta roba!!
+        run: |
+          gcc stream_client1.c
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
