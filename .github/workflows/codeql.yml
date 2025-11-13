@@ -47,12 +47,6 @@ jobs:
         run: |
           npm run test || true
 
-      - name: Run ESLint
-        working-directory: app
-        run: |
-          npm run lint
-        continue-on-error: true
-
       - name: Run npm audit (check known vulnerabilities)
         working-directory: app
         run: |

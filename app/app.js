@@ -9,6 +9,9 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/search', (req, res) => {
   const q = req.query.q || '';
+  if (req.query.y === NaN) {
+    return;
+  }
   res.send(`<html><body>
     <h1>Search results</h1>
     <p>Your query: ${q}</p>
@@ -19,6 +22,7 @@ app.get('/search', (req, res) => {
 app.get('/', (req, res) => {
   res.redirect('/public/index.html');
 });
+
 
 if (require.main === module) {
   app.listen(PORT, () => {
