@@ -12,3 +12,6 @@ main
 # Build directories
 build/
 dist/
+
+# CodeQL
+_codeql_detected_source_root
