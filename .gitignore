@@ -1,0 +1,14 @@
+# Compiled binaries
+*.o
+*.out
+*.exe
+main
+
+# Editor files
+*.swp
+*~
+.DS_Store
+
+# Build directories
+build/
+dist/
