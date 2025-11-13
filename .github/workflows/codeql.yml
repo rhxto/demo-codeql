@@ -1,43 +1,71 @@
----
-name: "CodeQL"
+name: "CodeQL + NodeJS checks"
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: ["main", "master", "node"]
   pull_request:
-    branches: ["main", "master"]
+    branches: ["main", "master", "node"]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+    - cron: '0 3 * * 0'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
 
 jobs:
   analyze:
-    name: Analyze C/C++ Code
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+    name: CodeQL + Node checks
 
     strategy:
-      fail-fast: false
       matrix:
-        language: ['c-cpp']
+        language: ['javascript']
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
+          languages: javascript
+          # build-mode manual per controllare il processo di build
+          build-mode: manual
           queries: security-and-quality
 
-      - name: Builda sta roba!!
+      - name: Build / run tests (so the CodeQL tracer can observe runtime build steps)
+        working-directory: app
         run: |
-          gcc -std=gnu89 -w stream_client1.c -o stream_client1
+          npm run test || true
+
+      - name: Run ESLint
+        working-directory: app
+        run: |
+          npm run lint
+        continue-on-error: true
+
+      - name: Run npm audit (check known vulnerabilities)
+        working-directory: app
+        run: |
+          npm audit --json > audit.json || true
+      - name: Upload npm audit result
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit
+          path: app/audit.json
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:javascript"
+

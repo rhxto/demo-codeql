@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>DemoXSS</h1>
+    <form action="/search" method="get">
+      <input name="q" placeholder="Type something"/>
+      <button type="submit">Search</button>
+    </form>
+    <p>Try: <a href="/search?q=<script>alert('xss')</script>">exploit</a></p>
+  </body>
+</html>
+
